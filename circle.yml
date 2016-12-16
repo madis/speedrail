@@ -1,0 +1,12 @@
+dependencies:
+  pre:
+    - gem install bundler
+
+deployment:
+  staging:
+    branch: master
+    heroku:
+      appname: speedrail-staging
+
+test:
+  post: bundle exec codeclimate-test-reporter
