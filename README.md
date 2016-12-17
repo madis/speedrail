@@ -16,6 +16,6 @@ Includes:
 Currently this is just plain rails app with couple cleanup & added gems. Cleaner solution would be to package it as a gem and provide generators with configurations.
 
 Features to add:
-
-[ ] automatic CI integration
-[ ] setting application name
+  - [ ] instead of hard copy, see how it could be implemented using rails generators
+  - [ ] automatic CI integration
+  - [ ] setting application name
