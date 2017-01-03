@@ -23,6 +23,17 @@ Prerequisites:
 rails new <app name> --template speedrail/template.rb
 ```
 
+## Tips
+
+To set global defaults for new rails projects, create `~/.railsrc` with suitable command line flags for you. Mine are:
+
+```
+--skip-test-unit
+--skip-bundle
+--database=postgresql
+--skip-keeps
+```
+
 ## Future developments
 
 Currently this is just plain rails app with couple cleanup & added gems. Cleaner solution would be to package it as a gem and provide generators with configurations.

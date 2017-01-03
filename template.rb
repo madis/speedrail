@@ -28,14 +28,22 @@ remove_file 'README.rdoc'
 end
 create_file 'app/assets/stylesheets/application.scss',  File.read(templates('app/assets/stylesheets/application.scss'))
 
+# Add configuration & dotfiles for various tools integration
+Dir["#{templates('dotfiles')}/*"].each do |path|
+  name = Pathname.new(path).basename
+  create_file ".#{name}", File.read(path)
+end
+
 # Create postgres database for test & development
 run "createdb #{app_path}_development"
 run "createdb #{app_path}_test"
 run "sed -i '' '1,54 s/username: #{app_path}/username: #{ENV['USER']}/' config/database.yml"
 
-after_bundle do
-  git :init
-  git commit: %Q{--allow-empty -m 'Empty root commit'}
+# Start new git repo with empty commit
+git :init
+git commit: %Q{--allow-empty -m 'Empty root commit'}
+
+def create_github_repo(app_path)
   auth = "#{ENV['GITHUB_USER']}:#{ENV['GITHUB_TOKEN']}"
   create_repo_cmd = "curl -v -u '#{auth}' -X POST https://api.github.com/user/repos -d '{\"name\":\"#{app_path}\"}'"
   run create_repo_cmd
@@ -43,4 +51,7 @@ after_bundle do
   git push: "origin master"
 end
 
+after_bundle do
+  create_github_repo(app_path) if yes?("Do you want to create github repo #{app_path}")
+end
 
