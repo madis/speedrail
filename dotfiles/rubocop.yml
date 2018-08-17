@@ -17,6 +17,11 @@ Style/Documentation:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/rails_helper.rb'
+
 AllCops:
   Exclude:
     - 'db/**/*'
+    - 'bin/*'

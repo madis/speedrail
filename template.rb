@@ -5,18 +5,22 @@ def templates(path)
   TEMPLATE_ROOT + "/#{path}"
 end
 
-gem 'sass-rails'
+gem 'sassc-rails'
 gem 'bootstrap-sass'
 
 gem_group :development, :test do
   gem 'factory_bot'
   gem 'spring-commands-rspec'
-  gem 'rubocop'
+  gem 'rubocop', require: false
   gem 'rspec-rails'
   gem 'capybara'
   gem 'shoulda-matchers', require: false
   gem 'pry'
   gem 'codeclimate-test-reporter', '~> 1.0.0'
+end
+
+gem_group :test do
+  gem 'database_cleaner'
 end
 
 remove_file 'app/assets/stylesheets/application.css'
