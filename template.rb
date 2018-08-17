@@ -9,7 +9,7 @@ gem 'sass-rails'
 gem 'bootstrap-sass'
 
 gem_group :development, :test do
-  gem 'factory_girl'
+  gem 'factory_bot'
   gem 'spring-commands-rspec'
   gem 'rubocop'
   gem 'rspec-rails'
@@ -44,14 +44,27 @@ git :init
 git commit: %Q{--allow-empty -m 'Empty root commit'}
 
 def create_github_repo(app_path)
-  auth = "#{ENV['GITHUB_USER']}:#{ENV['GITHUB_TOKEN']}"
-  create_repo_cmd = "curl -v -u '#{auth}' -X POST https://api.github.com/user/repos -d '{\"name\":\"#{app_path}\"}'"
+  user, token = get_github_credentials
+  create_repo_cmd = "curl -v -u '#{user}:#{token}' -X POST https://api.github.com/user/repos -d '{\"name\":\"#{app_path}\"}'"
   run create_repo_cmd
   git remote: "add origin git@github.com:#{ENV['GITHUB_USER']}/#{app_path}.git"
   git push: "origin master"
 end
 
+def get_github_credentials
+  user, token = [ENV['GITHUB_USER'], ENV['GITHUB_TOKEN']]
+  if user.nil? || token.nil?
+    puts "Please set GITHUB_USER and GITHUB_TOKEN environment variables before running this script"
+    puts "You can create one at https://github.com/settings/tokens/new"
+    puts "Make them available using:"
+    puts "  export GITHUB_USER=your-user GITHUB_TOKEN=your-token"
+  else
+    puts "Got the github credentials from ENV: user: #{user} token #{token.gsub(/./, '*')}"
+    [user, token]
+  end
+end
+
 after_bundle do
-  create_github_repo(app_path) if yes?("Do you want to create github repo #{app_path}")
+  create_github_repo(app_path) if yes?("Do you want to create github repo #{app_path} (y/n)?")
 end
 

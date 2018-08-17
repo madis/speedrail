@@ -9,4 +9,5 @@ deployment:
       appname: speedrail-staging
 
 test:
-  post: bundle exec codeclimate-test-reporter
+  post:
+    - bundle exec codeclimate-test-reporter
